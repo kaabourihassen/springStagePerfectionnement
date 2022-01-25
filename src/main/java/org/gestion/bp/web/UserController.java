@@ -7,25 +7,15 @@ import org.gestion.bp.configuration.JwtResponse;
 import org.gestion.bp.configuration.jwt.AuthTokenFilter;
 import org.gestion.bp.configuration.jwt.JwtUtils;
 import org.gestion.bp.entities.Role;
-import org.gestion.bp.exception.ResourceNotFoundException;
+import org.gestion.bp.exception.RessourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-import org.gestion.bp.dao.MaterielRepository;
-import org.gestion.bp.dao.OpProduitRepository;
-import org.gestion.bp.dao.OperationRepository;
-import org.gestion.bp.dao.ProduitRepository;
 import org.gestion.bp.entities.User;
-import org.gestion.bp.service.ArticleCService;
-import org.gestion.bp.service.CategorieService;
-import org.gestion.bp.service.MagazinService;
-import org.gestion.bp.service.MaterielService;
-import org.gestion.bp.service.OperationService;
-import org.gestion.bp.service.ProduitService;
 import org.gestion.bp.service.UserService;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -37,48 +27,17 @@ import javax.servlet.http.HttpServletRequest;
 public class UserController {
     @Autowired
     UserService userService;
-    
-    @Autowired
-    CategorieService categorieService;
-    
-    @Autowired
-    ProduitService produitService;
-    
-    @Autowired
-    ProduitRepository produitRepository;
-    
-    @Autowired
-    OperationRepository operationRepository;
-    
-    @Autowired
-    MagazinService magazinService;
-    
-    @Autowired
-    OperationService operationService;
-    
-    @Autowired
-    MaterielService materielService;
-    
-    @Autowired
-    MaterielRepository materielRepository;
-
-	@Autowired
-	OpProduitRepository opProduitRepository;
-	
-	@Autowired
-	ArticleCService articleCService;
 	@Autowired
 	private AuthenticationManager authenticationManager;
 	@Autowired
 	private JwtUtils jwtUtils;
 
 	AuthTokenFilter authTokenFilter;
-	 
-	 @Value("${dir.images}")
-	 private String imageDir;
 
 
-	@PostMapping("/auth/signIn")
+	PasswordEncoder passwordEncoder;
+
+	@PostMapping("/auth/signin")
 	public ResponseEntity<?> authenticateUser(@RequestBody User loginRequest) {
 
 		Authentication authentication = authenticationManager.authenticate(
@@ -93,7 +52,11 @@ public class UserController {
 				.collect(Collectors.toList());
 
 		return ResponseEntity.ok(new JwtResponse(jwt,
-				userDetails.getUsername(),roles,userDetails.getPrenom(),true));
+				userDetails.getFullName(),userDetails.getUserId(),roles,userDetails.getEmail(),true));
+	}
+	@PostMapping("/auth/register")
+	public User register(@RequestBody User user){
+		return userService.register(user);
 	}
 	 
 	 @GetMapping("/profil")
@@ -102,40 +65,62 @@ public class UserController {
 		 return userService.loadUserByUsername(jwtUtils.getUserNameFromJwtToken(token));
 	 }
 //Liste USER
-	@GetMapping("/ListUsers")
+	@GetMapping("/dashboard/ListUsers")
 	public List<User> getAllUsers() {
 		return userService.findUsers();
 	}
 
-	@GetMapping("/ListAdmin")
+	@GetMapping("/admin/ListAdmin")
 	public List<User> getAllA() {
 		return userService.findAdmins();
 	}
-@PostMapping(value="/InsertOuvrier")
-public User insertProdMateriel(@RequestBody User user) {
-	 BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-	    try {
-	        String encodedPassword = encoder.encode(user.getPassword());
-	        user.setPassword(encodedPassword);
-			user.setRole(Role.USER);
-	        return userService.insertUser(user);
-	    }
-	    catch(Exception e) {
-	        e.printStackTrace();
-	    }
-	    return user;
-	}
 
-	@PutMapping(value="/evolveToAdmin/{userId}")
+	@PostMapping(value="/dashboard/InsertOuvrier")
+	public User insertProdMateriel(@RequestBody User user) {
+		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+		try {
+			String encodedPassword = passwordEncoder.encode(user.getPassword());
+			user.setPassword(encodedPassword);
+			user.setRole(Role.USER);
+			return userService.insertUser(user);
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+		return user;
+	}
+	@PutMapping(value="/admin/evolveToAdmin/{userId}")
 	public User evolveToAdmin(@PathVariable Long userId) {
 	    try {
-			User user1 = userService.getOneUser(userId).orElseThrow(()->new ResourceNotFoundException("user not found!"));
+			User user1 = userService.getOneUser(userId).orElseThrow(()->new RessourceNotFoundException("user not found!"));
 			user1.setRole(Role.ADMIN);
 	    }
 	    catch(Exception e) {
 	        e.printStackTrace();
 	    }
 	    return null;
+	}
+	@PutMapping(value="/admin/evolveToRESPART/{userId}")
+	public User evolveToRESPART(@PathVariable Long userId) {
+		try {
+			User user1 = userService.getOneUser(userId).orElseThrow(()->new RessourceNotFoundException("user not found!"));
+			user1.setRole(Role.RESP_ART);
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	@PutMapping(value="/admin/evolveToRESPMAT/{userId}")
+	public User evolveToRESPMAT(@PathVariable Long userId) {
+		try {
+			User user1 = userService.getOneUser(userId).orElseThrow(()->new RessourceNotFoundException("user not found!"));
+			user1.setRole(Role.RESP_MAT);
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 	//hethi chnou taamel
 	//hethi chnou taamel
@@ -159,13 +144,13 @@ public User insertProdMateriel(@RequestBody User user) {
 //	}
 
 
-	@PutMapping(value="/updateUser/{userId}")
+	@PutMapping(value="/dashboard/updateUser/{userId}")
 	public User updateUser(@PathVariable Long userId,@RequestBody User user) {
 		return userService.updateUser(userId,user);
 	}
 
 	//Delete user
-	@DeleteMapping("/DeleteUser/{userId}")
+	@DeleteMapping("/admin/DeleteUser/{userId}")
 	public void deleteUser(@PathVariable Long userId){
 		userService.deleteUser(userId);
    	}

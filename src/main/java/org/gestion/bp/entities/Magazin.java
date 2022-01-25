@@ -11,11 +11,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.*;
 
-@Data
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
+@Data@Getter@Setter@NoArgsConstructor@AllArgsConstructor
 @Entity
 @Table(name="Magazin")
 public class Magazin implements Serializable {

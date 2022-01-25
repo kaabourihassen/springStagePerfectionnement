@@ -22,25 +22,16 @@ import org.springframework.security.core.userdetails.UserDetails;
 public class User implements UserDetails {
 
 	@Id
-	@Column(name="username",length=15)
+	@Column(name="id",length=15)
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long userId;
-
-	@Column(name = "username",length = 25)
-	private String username;
 	
 	@Column(name="cin",length=8)
 	@NotEmpty
 	@Size(min=8,max=8)
 	private int cin ;
 	
-	@Column(name="Prenom",length=15)
-	@NotEmpty
-	@Size(min=3,max=15)
-	private String prenom;
-	
 	@Column(name="Age",length=2)
-	@NotEmpty
 	@Size(min=1,max=2)
 	private int age;
 
@@ -52,7 +43,9 @@ public class User implements UserDetails {
 	@NotEmpty
 	@Size(min=8,max=30)
 	private String password;
-	
+	@Column(name = "fullName",length = 25)
+	@NotEmpty
+	private String fullName;
 	private String photo;
 	
 	@NotNull
@@ -67,29 +60,24 @@ public class User implements UserDetails {
 	private List<Operation> operations;
 
 
-
-	public String getUsername() {
-		return username;
-	}
-
 	@Override
 	public boolean isAccountNonExpired() {
-		return false;
+		return true;
 	}
 
 	@Override
 	public boolean isAccountNonLocked() {
-		return false;
+		return true;
 	}
 
 	@Override
 	public boolean isCredentialsNonExpired() {
-		return false;
+		return true;
 	}
 
 	@Override
 	public boolean isEnabled() {
-		return false;
+		return true;
 	}
 
 
@@ -99,7 +87,10 @@ public class User implements UserDetails {
 		return Collections.singletonList(authority);
 	}
 
-
+	@Override
+	public String getUsername() {
+		return getEmail();
+	}
 
 
 }

@@ -5,12 +5,13 @@ import org.gestion.bp.entities.Operation;
 import org.gestion.bp.entities.OperationProduit;
 import org.gestion.bp.entities.Produit;
 import org.gestion.bp.entities.User;
-import org.gestion.bp.exception.ResourceNotFoundException;
+import org.gestion.bp.exception.RessourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
-import javax.jws.soap.SOAPBinding;
+import java.util.List;
 
-
+@Service
 public class OpProduitService {
 	@Autowired
 	private OpProduitRepository opProduitRepository;
@@ -22,17 +23,17 @@ public class OpProduitService {
 	private ProduitService produitService;
 
 
-	public OperationProduit insertOpProd(Long userId,Operation operation,OperationProduit operationProduit,int code) throws ResourceNotFoundException {
-		User user = userService.getOneUser(userId).orElseThrow(()-> new ResourceNotFoundException("user not found"));
+	public OperationProduit insertOpProd(Long userId,Operation operation,OperationProduit operationProduit,Long code) throws RessourceNotFoundException {
+		User user = userService.getOneUser(userId).orElseThrow(()-> new RessourceNotFoundException("user not found"));
 		operation.setUser(user);
 		Operation operation1 = operationService.insertOperation(operation);
 		operationProduit.setOperation(operation1);
-		Produit produit = produitService.findById(code);
+		Produit produit = produitService.getOneProduit(code);
 		operationProduit.setProduit(produit);
 		return opProduitRepository.save(operationProduit);
 	}
-	public OperationProduit updateOpProd(int id,OperationProduit operationProduit){
-		OperationProduit operationProduit1 = opProduitRepository.getById(id);
+	public OperationProduit updateOpProd(Long id,OperationProduit operationProduit) throws RessourceNotFoundException {
+		OperationProduit operationProduit1 = opProduitRepository.findById(id).orElseThrow(()-> new RessourceNotFoundException("operationProduit not found"));;
 		operationProduit1.setProduit(operationProduit.getProduit());
 		operationProduit1.setOperation(operationProduit.getOperation());
 		operationProduit1.setDatePrise(operationProduit.getDatePrise());
@@ -40,8 +41,16 @@ public class OpProduitService {
 		operationProduit1.setDateRetour(operationProduit.getDateRetour());
 		return opProduitRepository.save(operationProduit1);
 	}
+	public OperationProduit getOneOpProd(Long id) throws RessourceNotFoundException {
+		return opProduitRepository.findById(id).orElseThrow(()-> new RessourceNotFoundException("operationProduit not found"));
+	}
+	public List<OperationProduit> getAllOpProd(){
+		return opProduitRepository.findAll();
+	}
 	
-	public void deleteOperationProduit(int id) {	
+	public void deleteOperationProduit(Long id) throws RessourceNotFoundException {
+		OperationProduit operationProduit1 = opProduitRepository.findById(id).orElseThrow(()-> new RessourceNotFoundException("operationProduit not found"));;
+		operationService.deleteOperation(operationProduit1.getOperation().getId());
 		opProduitRepository.deleteById(id);
 	}
 	

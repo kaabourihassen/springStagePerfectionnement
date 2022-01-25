@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.gestion.bp.dao.CategorieRepository;
 import org.gestion.bp.entities.Categorie;
+import org.gestion.bp.exception.RessourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +24,7 @@ public class CategorieService {
 		return  categoryRepository.findAll();
 	}
 
-	public Categorie UpdateCategory(Long catId, Categorie category) {
+	public Categorie UpdateCategory(Long catId, Categorie category) throws RessourceNotFoundException {
 		Categorie c = getCategorie(catId);
 		c.setNomCateg(category.getNomCateg());
 		c.setDescription(category.getDescription());
@@ -34,8 +35,8 @@ public class CategorieService {
 		categoryRepository.deleteById(catId);
 	}
 	
-	public Categorie getCategorie(Long catId) {
-		return categoryRepository.findById(catId).orElseThrow(() -> new RuntimeException("Categorie introuvable !"));
+	public Categorie getCategorie(Long catId) throws RessourceNotFoundException {
+		return categoryRepository.findById(catId).orElseThrow(() -> new RessourceNotFoundException("Categorie introuvable !"));
 	}
 
 	

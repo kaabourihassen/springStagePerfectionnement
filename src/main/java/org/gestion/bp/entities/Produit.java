@@ -15,11 +15,7 @@ import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import lombok.*;
 
-@Data
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
+@Data@Getter@Setter@NoArgsConstructor@AllArgsConstructor
 @Entity
 @Inheritance(strategy=InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name="type_Produit")
@@ -41,20 +37,19 @@ public class Produit implements Serializable{
 	private String intitule;
 	@NotEmpty
 	private String matricule;
-	private int test;
 	private String photo;
 
 	@ManyToOne
 	@JoinColumn(name="nomMagazin")
 	//@JsonIgnoreProperties("nomMagazin")
-	@JsonBackReference
+//	@JsonBackReference
 	private Magazin magazin;
 	
 	
 	@ManyToOne
     @JoinColumn(name="nomCateg")
 	//@JsonIgnoreProperties("nomCateg")
-	@JsonBackReference
+//	@JsonBackReference
 	private Categorie categorie;
 
 	@JsonManagedReference

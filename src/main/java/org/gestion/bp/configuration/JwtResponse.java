@@ -13,16 +13,17 @@ public class JwtResponse {
 	private String type = "Bearer";
 	@JsonSerialize(using= ToStringSerializer.class)
 	private Long id;
-	private String username;
+	private String fullName;
 	private List<String> roles;
-	private String prenom;
+	private String email;
 	private Boolean active;
 
-	public JwtResponse(String token, String username, List<String> roles, String prenom, Boolean active) {
+	public JwtResponse(String token, String fullName, Long id,List<String> roles, String email, Boolean active) {
 		this.token = token;
-		this.username = username;
+		this.fullName = fullName;
+		this.id=id;
 		this.roles = roles;
-		this.prenom = prenom;
+		this.email = email;
 		this.active = active;
 	}
 

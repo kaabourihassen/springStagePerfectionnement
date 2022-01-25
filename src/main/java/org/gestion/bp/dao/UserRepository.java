@@ -10,10 +10,9 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 @Repository
 public interface UserRepository  extends JpaRepository<User, Long> {
-	@Query("SELECT u FROM User u WHERE u.username=:nom")
-	Optional<User> findByUsername(String nom);
 	Optional<User> findById(Long id);
 
-	public List<User> findUsersByRole(Role role);
-	
+	List<User> findUsersByRole(Role role);
+
+	Optional<User> findByEmail(String email);
 }

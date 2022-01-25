@@ -15,11 +15,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 
-@Data
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
+@Data@Getter@Setter@NoArgsConstructor@AllArgsConstructor
 @Entity
 @Table(name = "opereations")
 public class Operation implements Serializable{

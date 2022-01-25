@@ -10,11 +10,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
-@Data
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
+@Data@Getter@Setter@NoArgsConstructor@AllArgsConstructor
 @Entity
 @Table(name = "operationproduits")
 public class OperationProduit implements Serializable{

@@ -18,7 +18,7 @@ public class OperationService {
 		return operationRepository.save(operation);
 	}
 
-	public Operation getOneOperation(int id){
+	public Operation getOneOperation(Long id){
 		return operationRepository.getById(id);
 	}
 	
@@ -26,7 +26,7 @@ public class OperationService {
 		return  operationRepository.findAll();
 	}
 
-	public Operation updateOperation(int id,Operation operation){
+	public Operation updateOperation(Long id,Operation operation){
 		Operation operation1 = operationRepository.getById(id);
 		operation1.setOperationProduits(operation.getOperationProduits());
 		operation1.setDateOP(operation.getDateOP());
@@ -37,7 +37,7 @@ public class OperationService {
 		return operationRepository.save(operation1);
 	}
 	
-	public void deleteOperation(int id) {	
+	public void deleteOperation(Long id) {
 		operationRepository.deleteById(id);
 	}
 
