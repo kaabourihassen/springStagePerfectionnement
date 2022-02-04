@@ -1,5 +1,6 @@
 package org.gestion.bp.service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.gestion.bp.dao.MaterielRepository;
@@ -15,6 +16,7 @@ public class MaterielService {
 
 
 	public Materiel createMateriel(Materiel materiel){
+		materiel.setDateRetour(LocalDateTime.now().plusHours(48));
 		return materielRepository.save(materiel);
 	}
 	public Materiel UpdateMateriel(Long materielId, Materiel a) throws RessourceNotFoundException {
