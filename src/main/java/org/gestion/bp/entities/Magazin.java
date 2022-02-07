@@ -6,7 +6,10 @@ import java.util.List;
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.*;
@@ -23,7 +26,7 @@ public class Magazin implements Serializable {
 	@Column(name = "nomMagazin",length = 15)
 	private String nomMagazin;
 
-	@JsonManagedReference
+
 	@JsonIgnore
 	@OneToMany(mappedBy="magazin",cascade = CascadeType.ALL)
 	private List<Produit> produits;

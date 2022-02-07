@@ -3,10 +3,7 @@ package org.gestion.bp.service;
 import java.util.List;
 
 import org.gestion.bp.dao.ArticleCRepository;
-import org.gestion.bp.dao.MaterielRepository;
 import org.gestion.bp.entities.ArticleConsomme;
-import org.gestion.bp.entities.Materiel;
-import org.gestion.bp.entities.Produit;
 import org.gestion.bp.exception.RessourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,15 +12,21 @@ import org.springframework.stereotype.Service;
 public class ArticleCService {
 	@Autowired
 	ArticleCRepository articleCRepository;
+	@Autowired
+	MagazinService magazinService;
+	@Autowired
+	CategoryService categoryService;
 
-	public ArticleConsomme createArticle(ArticleConsomme articleConsomme){
+	public ArticleConsomme createArticle(ArticleConsomme articleConsomme) throws RessourceNotFoundException {
+		articleConsomme.setMagazin(magazinService.getOneMagazin(articleConsomme.getMagazin().getMagazinId()));
+		articleConsomme.setCategory(categoryService.getCategorie(articleConsomme.getCategory().getCategoryId()));
 		return articleCRepository.save(articleConsomme);
 	}
 	public ArticleConsomme UpdateArticleC(Long articleId,ArticleConsomme a) throws RessourceNotFoundException {
 		ArticleConsomme articleConsomme = articleCRepository.findById(articleId).orElseThrow(()->new RessourceNotFoundException("Article not found"));
 		articleConsomme.setQte(a.getQte());
 		articleConsomme.setQteMin(a.getQteMin());
-		articleConsomme.setCategorie(a.getCategorie());
+		articleConsomme.setCategory(a.getCategory());
 		articleConsomme.setIntitule(a.getIntitule());
 		articleConsomme.setMagazin(a.getMagazin());
 		articleConsomme.setOperationProduits(a.getOperationProduits());

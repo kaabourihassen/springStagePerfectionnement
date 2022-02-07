@@ -1,12 +1,10 @@
 package org.gestion.bp.web;
 
 import org.gestion.bp.exception.RessourceNotFoundException;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import org.gestion.bp.dao.CategorieRepository;
-import org.gestion.bp.entities.Categorie;
-import org.gestion.bp.service.CategorieService;
+import org.gestion.bp.entities.Category;
+import org.gestion.bp.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 
@@ -17,21 +15,21 @@ import java.util.List;
 public class CategorieController {
 
     @Autowired
-    CategorieService categoryService;
-	 @GetMapping("/")
-	 public List<Categorie> getAllCategories(Model model) {
+	CategoryService categoryService;
+	 @GetMapping("")
+	 public List<Category> getAllCategories(Model model) {
 	 	 return categoryService.findAllCategories();
 	 }
 
-	 @PutMapping(value="/updateCateg/{catId}")
-	 public Categorie updateCateg(@PathVariable Long catId,@RequestBody Categorie cat) throws RessourceNotFoundException {
+	 @PutMapping(value="/{catId}")
+	 public Category updateCateg(@PathVariable Long catId, @RequestBody Category cat) throws RessourceNotFoundException {
 		 return categoryService.UpdateCategory(catId,cat);
 
 	 }
 
-	 @PostMapping(value="/")
-	 public Categorie insertProdArticleC(@RequestBody Categorie categorie) {
-	     return categoryService.insertCategory(categorie);
+	 @PostMapping(value="")
+	 public Category insertProdArticleC(@RequestBody Category category) {
+	     return categoryService.insertCategory(category);
 	 }
 	 
 	 

@@ -26,7 +26,7 @@ public class MagazinController {
     public Magazin createMagazin(@RequestBody Magazin magazin){
         return magazinService.createMagazin(magazin);
     }
-    @PutMapping("/updateMagazin/{magazinId}")
+    @PutMapping("/{magazinId}")
     public Magazin updateMagazin(@PathVariable Long magazinId,@RequestBody Magazin magazin) throws RessourceNotFoundException {
         return magazinService.UpdateMagazin(magazinId,magazin);
     }

@@ -5,31 +5,29 @@ import java.util.Collection;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.*;
 
 @Data@Getter@Setter@NoArgsConstructor@AllArgsConstructor
 @Entity
 @Table(name="Categorie")
-public class Categorie implements Serializable {
+public class Category implements Serializable {
 	@Id
-	@Column(name="id",length=45)
+	@Column(name="CategoryId",length=45)
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@NotEmpty
-	private Long id;
+	private Long CategoryId;
 	@NotEmpty
 	private String nomCateg;
 
 	@NotEmpty
 	private String description;
 	
-	@JsonManagedReference
+
 	@JsonIgnore
-	@OneToMany(mappedBy="categorie",cascade = CascadeType.ALL)
+	@OneToMany(mappedBy= "category",cascade = CascadeType.ALL)
 	private Collection<Produit> produits;
 
 	

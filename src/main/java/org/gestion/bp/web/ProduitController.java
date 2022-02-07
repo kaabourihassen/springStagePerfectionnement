@@ -29,12 +29,12 @@ public class ProduitController {
 	}
 
 	@PostMapping("/materiels")
-	public Materiel createMateriel(@RequestBody Materiel materiel){
+	public Materiel createMateriel(@RequestBody Materiel materiel) throws RessourceNotFoundException {
 		return materielService.createMateriel(materiel);
 	}
 
 	@PostMapping("/articles")
-	public ArticleConsomme createArticle(@RequestBody ArticleConsomme articleConsomme){
+	public ArticleConsomme createArticle(@RequestBody ArticleConsomme articleConsomme) throws RessourceNotFoundException {
 		return articleCService.createArticle(articleConsomme);
 	}
 

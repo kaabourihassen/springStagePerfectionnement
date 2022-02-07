@@ -35,7 +35,7 @@ public class User implements UserDetails {
 	@Size(min=1,max=2)
 	private int age;
 
-	@Column(name = "email")
+	@Column(name = "email", unique = true)
 	@NotEmpty
 	private String email;
 

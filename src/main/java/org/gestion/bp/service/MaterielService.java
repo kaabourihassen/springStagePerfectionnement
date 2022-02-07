@@ -13,16 +13,21 @@ import org.springframework.stereotype.Service;
 public class MaterielService {
 	@Autowired
 	MaterielRepository materielRepository;
+	@Autowired
+	MagazinService magazinService;
+	@Autowired
+	CategoryService categoryService;
 
-
-	public Materiel createMateriel(Materiel materiel){
+	public Materiel createMateriel(Materiel materiel) throws RessourceNotFoundException {
 		materiel.setDateRetour(LocalDateTime.now().plusHours(48));
+		materiel.setMagazin(magazinService.getOneMagazin(materiel.getMagazin().getMagazinId()));
+		materiel.setCategory(categoryService.getCategorie(materiel.getCategory().getCategoryId()));
 		return materielRepository.save(materiel);
 	}
 	public Materiel UpdateMateriel(Long materielId, Materiel a) throws RessourceNotFoundException {
 		Materiel materiel = materielRepository.findById(materielId).orElseThrow(()->new RessourceNotFoundException("materiel not found"));
 		materiel.setDateRetour(a.getDateRetour());
-		materiel.setCategorie(a.getCategorie());
+		materiel.setCategory(a.getCategory());
 		materiel.setIntitule(a.getIntitule());
 		materiel.setMagazin(a.getMagazin());
 		materiel.setMatricule(a.getMatricule());

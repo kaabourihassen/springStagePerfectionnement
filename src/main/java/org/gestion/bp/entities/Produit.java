@@ -7,12 +7,8 @@ import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import lombok.*;
 
 @Data@Getter@Setter@NoArgsConstructor@AllArgsConstructor
@@ -40,17 +36,13 @@ public class Produit implements Serializable{
 	private String photo;
 
 	@ManyToOne
-	@JoinColumn(name="nomMagazin")
-	//@JsonIgnoreProperties("nomMagazin")
-//	@JsonBackReference
+	@JoinColumn(name="magazinId")
 	private Magazin magazin;
 	
 	
 	@ManyToOne
-    @JoinColumn(name="nomCateg")
-	//@JsonIgnoreProperties("nomCateg")
-//	@JsonBackReference
-	private Categorie categorie;
+    @JoinColumn(name="categoryId")
+	private Category category;
 
 	@JsonManagedReference
 	@JsonIgnore
