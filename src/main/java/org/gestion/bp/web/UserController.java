@@ -34,7 +34,7 @@ public class UserController {
 
 	AuthTokenFilter authTokenFilter;
 
-
+	@Autowired
 	PasswordEncoder passwordEncoder;
 
 	@PostMapping("/auth/signin")
@@ -70,6 +70,11 @@ public class UserController {
 		return userService.findUsers();
 	}
 
+	@GetMapping("/dashboard/ListUsers/{userId}")
+	public User getOneUser(@PathVariable Long userId) throws RessourceNotFoundException {
+		return userService.getOneUser(userId);
+	}
+
 	@GetMapping("/admin/ListAdmin")
 	public List<User> getAllA() {
 		return userService.findAdmins();
@@ -92,7 +97,7 @@ public class UserController {
 	@PutMapping(value="/admin/evolveToAdmin/{userId}")
 	public User evolveToAdmin(@PathVariable Long userId) {
 	    try {
-			User user1 = userService.getOneUser(userId).orElseThrow(()->new RessourceNotFoundException("user not found!"));
+			User user1 = userService.getOneUser(userId);
 			user1.setRole(Role.ADMIN);
 	    }
 	    catch(Exception e) {
@@ -103,7 +108,7 @@ public class UserController {
 	@PutMapping(value="/admin/evolveToRESPART/{userId}")
 	public User evolveToRESPART(@PathVariable Long userId) {
 		try {
-			User user1 = userService.getOneUser(userId).orElseThrow(()->new RessourceNotFoundException("user not found!"));
+			User user1 = userService.getOneUser(userId);
 			user1.setRole(Role.RESP_ART);
 		}
 		catch(Exception e) {
@@ -114,7 +119,7 @@ public class UserController {
 	@PutMapping(value="/admin/evolveToRESPMAT/{userId}")
 	public User evolveToRESPMAT(@PathVariable Long userId) {
 		try {
-			User user1 = userService.getOneUser(userId).orElseThrow(()->new RessourceNotFoundException("user not found!"));
+			User user1 = userService.getOneUser(userId);
 			user1.setRole(Role.RESP_MAT);
 		}
 		catch(Exception e) {

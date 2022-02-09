@@ -27,7 +27,7 @@ public class Category implements Serializable {
 	
 
 	@JsonIgnore
-	@OneToMany(mappedBy= "category",cascade = CascadeType.ALL)
+	@OneToMany(mappedBy= "category",cascade = CascadeType.MERGE)
 	private Collection<Produit> produits;
 
 	

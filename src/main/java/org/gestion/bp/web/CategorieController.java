@@ -21,6 +21,11 @@ public class CategorieController {
 	 	 return categoryService.findAllCategories();
 	 }
 
+	@GetMapping("{catId}")
+	public Category getCategory(@PathVariable Long catId) throws RessourceNotFoundException {
+		return categoryService.getCategorie(catId);
+	}
+
 	 @PutMapping(value="/{catId}")
 	 public Category updateCateg(@PathVariable Long catId, @RequestBody Category cat) throws RessourceNotFoundException {
 		 return categoryService.UpdateCategory(catId,cat);

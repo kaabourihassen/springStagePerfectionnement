@@ -39,16 +39,17 @@ public class UserService implements UserDetailsService {
 		}
 
 
-	    public Optional<User> getOneUser(Long userId) {
-			return userRepository.findById(userId);
+	    public User getOneUser(Long userId) throws RessourceNotFoundException {
+			return userRepository.findById(userId).orElseThrow(()-> new RessourceNotFoundException("user not found"));
 	    }
 
 	    public User updateUser(Long id,User user) {
 			try {
-				User user1 = getOneUser(id).orElseThrow(()-> new RessourceNotFoundException("user not found"));
+				User user1 = getOneUser(id);
 				user1.setAge(user.getAge());
 				user1.setCin(user.getCin());
 				user1.setFullName(user.getFullName());
+				user1.setEmail(user.getEmail());
 				return userRepository.save(user1);
 			}catch(Exception e) {
 				e.printStackTrace();

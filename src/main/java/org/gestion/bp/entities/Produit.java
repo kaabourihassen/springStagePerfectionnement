@@ -1,12 +1,10 @@
 package org.gestion.bp.entities;
 
 import java.io.Serializable;
-import java.util.Set;
-
+import java.util.List;
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
-
 import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
 import lombok.*;
@@ -44,10 +42,9 @@ public class Produit implements Serializable{
     @JoinColumn(name="categoryId")
 	private Category category;
 
-	@JsonManagedReference
 	@JsonIgnore
-	@OneToMany(mappedBy="produit",cascade = CascadeType.REMOVE)
-    private Set<OperationProduit> operationProduits;
+	@OneToMany(mappedBy="produit",cascade = CascadeType.MERGE)
+    private List<Operation> operations;
 
 
 	

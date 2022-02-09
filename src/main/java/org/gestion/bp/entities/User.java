@@ -22,7 +22,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 public class User implements UserDetails {
 
 	@Id
-	@Column(name="id",length=15)
+	@Column(name="userid",length=15)
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long userId;
 	
@@ -51,12 +51,11 @@ public class User implements UserDetails {
 	@NotNull
 	private boolean enabled=true;
 
-	@JsonBackReference
+	@JsonIgnore
 	private Role role;
 
-	@JsonManagedReference
 	@JsonIgnore
-	@OneToMany(mappedBy="user",cascade = CascadeType.ALL , fetch =FetchType.EAGER)
+	@OneToMany(mappedBy="user",cascade = CascadeType.MERGE , fetch =FetchType.EAGER)
 	private List<Operation> operations;
 
 

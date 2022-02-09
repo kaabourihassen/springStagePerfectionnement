@@ -28,7 +28,7 @@ public class Magazin implements Serializable {
 
 
 	@JsonIgnore
-	@OneToMany(mappedBy="magazin",cascade = CascadeType.ALL)
+	@OneToMany(mappedBy="magazin",cascade = CascadeType.MERGE)
 	private List<Produit> produits;
 
 	

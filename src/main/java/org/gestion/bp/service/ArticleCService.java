@@ -28,17 +28,33 @@ public class ArticleCService {
 		articleConsomme.setQteMin(a.getQteMin());
 		articleConsomme.setCategory(a.getCategory());
 		articleConsomme.setIntitule(a.getIntitule());
+		articleConsomme.setMatricule(a.getMatricule());
 		articleConsomme.setMagazin(a.getMagazin());
-		articleConsomme.setOperationProduits(a.getOperationProduits());
 		return articleCRepository.save(articleConsomme);
 	}
 	public void deleteArticleC(Long a) {
 		articleCRepository.deleteById(a);
 	}
+
+	public Boolean retraitQTE(int qte,Long articleId) throws RessourceNotFoundException {
+		ArticleConsomme articleConsomme = getOneArticle(articleId);
+		if(articleConsomme.getQte()-qte<articleConsomme.getQteMin()){
+			return false;
+		}else {
+			articleConsomme.setQte(articleConsomme.getQte()-qte);
+			articleCRepository.save(articleConsomme);
+			return true;
+		}
+	}
+	public ArticleConsomme versementQTE(int qte,Long articleId) throws RessourceNotFoundException {
+		ArticleConsomme articleConsomme = getOneArticle(articleId);
+		articleConsomme.setQte(articleConsomme.getQte()+qte);
+		return articleCRepository.save(articleConsomme);
+	}
 	
 	public ArticleConsomme getOneArticle(Long id) throws RessourceNotFoundException {
-			return articleCRepository.findById(id).orElseThrow(()->new RessourceNotFoundException("Article not found"));
-	    }
+		return articleCRepository.findById(id).orElseThrow(()->new RessourceNotFoundException("Article not found"));
+	}
 
 	public List<ArticleConsomme> findAllArticleC() {	
 		return articleCRepository.findAll();

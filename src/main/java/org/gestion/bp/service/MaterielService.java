@@ -1,5 +1,6 @@
 package org.gestion.bp.service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -19,7 +20,6 @@ public class MaterielService {
 	CategoryService categoryService;
 
 	public Materiel createMateriel(Materiel materiel) throws RessourceNotFoundException {
-		materiel.setDateRetour(LocalDateTime.now().plusHours(48));
 		materiel.setMagazin(magazinService.getOneMagazin(materiel.getMagazin().getMagazinId()));
 		materiel.setCategory(categoryService.getCategorie(materiel.getCategory().getCategoryId()));
 		return materielRepository.save(materiel);
@@ -33,6 +33,17 @@ public class MaterielService {
 		materiel.setMatricule(a.getMatricule());
 		return materielRepository.save(materiel);
 	}
+
+	public Materiel retrait(Long materielId) throws RessourceNotFoundException {
+		Materiel materiel = getOneMateriel(materielId);
+		return materielRepository.save(materiel);
+	}
+	public Materiel versement(Long materielId) throws RessourceNotFoundException {
+		Materiel materiel = getOneMateriel(materielId);
+		materiel.setDateRetour(LocalDate.now());
+		return materielRepository.save(materiel);
+	}
+
 	public void deleteMateriel(Long a) {
 		materielRepository.deleteById(a);
 	}
