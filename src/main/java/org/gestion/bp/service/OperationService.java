@@ -22,20 +22,37 @@ public class OperationService {
 	public Operation createOperation(Operation operation) throws RessourceNotFoundException {
 		if(operation.getProduit() instanceof ArticleConsomme){
 			if(operation.getNatureOperation().equals("retrait")){
-				articleCService.retraitQTE(operation.getQte(),operation.getProduit().getCode());
+				Boolean b = articleCService.retraitQTE(operation.getQte(),operation.getProduit().getCode());
+				if(b){
+					operation = operationRepository.save(operation);
+					operation.getUser().setRole(Role.USER);
+					return operation;
+				}
 			}else if (operation.getNatureOperation().equals("versemet")){
 				articleCService.versementQTE(operation.getQte(),operation.getProduit().getCode());
+				operation = operationRepository.save(operation);
+				operation.getUser().setRole(Role.USER);
+				return operation;
 			}
 		}else{
 			if (operation.getNatureOperation().equals("retrait") ) {
-				materielService.retrait(operation.getProduit().getCode());
+				Boolean b = materielService.retrait(operation.getProduit().getCode());
+				if(b){
+					operation = operationRepository.save(operation);
+					operation.getUser().setRole(Role.USER);
+					return operation;
+				}
 			} else if (operation.getNatureOperation().equals("versemet")) {
-				materielService.versement(operation.getProduit().getCode());
+				Boolean b = materielService.versement(operation.getProduit().getCode());
+				if (b) {
+					operation = operationRepository.save(operation);
+					operation.getUser().setRole(Role.USER);
+					return operation;
+				}
 			}
 		}
-		operation = operationRepository.save(operation);
-		operation.getUser().setRole(Role.USER);
-		return operation;
+		return null;
+
 	}
 
 	public Operation getOneOperation(Long id) throws RessourceNotFoundException {

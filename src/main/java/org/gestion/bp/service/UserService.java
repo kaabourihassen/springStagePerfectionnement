@@ -25,14 +25,7 @@ public class UserService implements UserDetailsService {
 		public User insertUser(User user) {	
 			return userRepository.save(user);
 		}
-		
-		public List<User> findAllUsers() {	
-			return userRepository.findAll();
-		}
-		
-		public User UpdateHardUser(User user) {	
-			return userRepository.save(user);
-		}
+
 
 		public void deleteUser(Long userId) {
 			userRepository.deleteById(userId);
@@ -57,16 +50,19 @@ public class UserService implements UserDetailsService {
 			return user;
 	    }
 	    
-	    
-	    public List<User> findUsers(){
+	public List<User> findUsers(){
 	    	return  userRepository.findUsersByRole(Role.USER);
 	    }
 	    
-	    
-	    public List<User> findAdmins(){
+	public List<User> findAdmins(){
 	    	return  userRepository.findUsersByRole(Role.ADMIN);
 	    }
-
+	public List<User> getAllRestMat() {
+		return  userRepository.findUsersByRole(Role.RESP_MAT);
+	}
+	public List<User> getAllRestArt() {
+		return  userRepository.findUsersByRole(Role.RESP_ART);
+	}
 	@Override
 	public User loadUserByUsername(String email) throws UsernameNotFoundException {
 		return userRepository.findByEmail(email).orElseThrow(()->new UsernameNotFoundException(String.format("User not found", email)));
@@ -85,6 +81,8 @@ public class UserService implements UserDetailsService {
 		user1.setPassword(encodedPass);
 		return userRepository.save(user1);
     }
+
+
 
 }
 

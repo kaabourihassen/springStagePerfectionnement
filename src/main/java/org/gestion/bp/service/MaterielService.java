@@ -34,14 +34,26 @@ public class MaterielService {
 		return materielRepository.save(materiel);
 	}
 
-	public Materiel retrait(Long materielId) throws RessourceNotFoundException {
+	public Boolean retrait(Long materielId) throws RessourceNotFoundException {
 		Materiel materiel = getOneMateriel(materielId);
-		return materielRepository.save(materiel);
+		if(materiel.getPris()){
+			return false;
+		}else{
+			materiel.setPris(true);
+			materielRepository.save(materiel);
+			return true;
+		}
 	}
-	public Materiel versement(Long materielId) throws RessourceNotFoundException {
+	public Boolean versement(Long materielId) throws RessourceNotFoundException {
 		Materiel materiel = getOneMateriel(materielId);
-		materiel.setDateRetour(LocalDate.now());
-		return materielRepository.save(materiel);
+		if(materiel.getPris()){
+			materiel.setPris(false);
+			materiel.setDateRetour(LocalDate.now());
+			materielRepository.save(materiel);
+			return true;
+		}else{
+			return false;
+		}
 	}
 
 	public void deleteMateriel(Long a) {

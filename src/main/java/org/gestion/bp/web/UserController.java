@@ -52,7 +52,7 @@ public class UserController {
 				.collect(Collectors.toList());
 
 		return ResponseEntity.ok(new JwtResponse(jwt,
-				userDetails.getFullName(),userDetails.getUserId(),roles,userDetails.getEmail(),true));
+				userDetails.getFullName(),userDetails.getUserId(),userDetails.getRole(),userDetails.getEmail(),true));
 	}
 	@PostMapping("/auth/register")
 	public User register(@RequestBody User user){
@@ -75,11 +75,6 @@ public class UserController {
 		return userService.getOneUser(userId);
 	}
 
-	@GetMapping("/admin/ListAdmin")
-	public List<User> getAllA() {
-		return userService.findAdmins();
-	}
-
 	@PostMapping(value="/dashboard/InsertOuvrier")
 	public User insertProdMateriel(@RequestBody User user) {
 		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
@@ -94,6 +89,26 @@ public class UserController {
 		}
 		return user;
 	}
+	@PutMapping(value="/dashboard/updateUser/{userId}")
+	public User updateUser(@PathVariable Long userId,@RequestBody User user) {
+		return userService.updateUser(userId,user);
+	}
+
+	@GetMapping("/admin/ListAdmin")
+	public List<User> getAllAdmins() {
+		return userService.findAdmins();
+	}
+
+	@GetMapping("/admin/ListRestMat")
+	public List<User> getAllRestMat() {
+		return userService.getAllRestMat();
+	}
+
+	@GetMapping("/admin/ListRestArt")
+	public List<User> getAllRestArt() {
+		return userService.getAllRestArt();
+	}
+
 	@PutMapping(value="/admin/evolveToAdmin/{userId}")
 	public User evolveToAdmin(@PathVariable Long userId) {
 	    try {
@@ -127,32 +142,19 @@ public class UserController {
 		}
 		return null;
 	}
-	//hethi chnou taamel
-	//hethi chnou taamel
-	//hethi chnou taamel
-	//hethi chnou taamel
-	//hethi chnou taamel
-//	@RequestMapping(value="/RoleUserIntoDB", method= RequestMethod.POST)
-//	public String AffRoleUserIntoDB(Model model, @ModelAttribute("USER") User user, @ModelAttribute("roles") Role role) {
-//	try {
-//		User u = userService.findById(user.getUsername());
-//		System.out.println("$$$****----- : "+u.getUsername());
-//		System.out.println("$$$****----- : "+user.getUsername());
-//		u.setRoles(user.getRoles());
-//		userService.insertUser(u);
-//	}
-//	catch(Exception e) {
-//		e.printStackTrace();
-//	}
-//
-//	return "redirect:/ListUsers";
-//	}
 
-
-	@PutMapping(value="/dashboard/updateUser/{userId}")
-	public User updateUser(@PathVariable Long userId,@RequestBody User user) {
-		return userService.updateUser(userId,user);
+	@PutMapping(value="/admin/demoteToUser/{userId}")
+	public User demoteToUser(@PathVariable Long userId) {
+		try {
+			User user1 = userService.getOneUser(userId);
+			user1.setRole(Role.USER);
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
+
 
 	//Delete user
 	@DeleteMapping("/admin/DeleteUser/{userId}")

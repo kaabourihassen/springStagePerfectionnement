@@ -18,7 +18,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 public class Operation implements Serializable{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	private Long OperationId;
 	
 	@Column(name="natureOp",length=15)
 	@Size(min=3,max=15)

@@ -12,4 +12,5 @@ import java.time.LocalDate;
 public class Materiel extends Produit{
 	@NotEmpty
 	private LocalDate dateRetour;
+	private Boolean pris;
 }

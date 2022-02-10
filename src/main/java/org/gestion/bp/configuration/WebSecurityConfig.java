@@ -56,14 +56,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		http.cors().and().csrf().disable()
 			.exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
 			.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-				.authorizeRequests().anyRequest().permitAll();
-//			.authorizeRequests().antMatchers("/auth/**").permitAll()
-//			.antMatchers("/categories/**","/magazins/**","/dashboard/**").hasAnyAuthority("ADMIN","RESP_ART","RESP_MAT")
-//				.antMatchers("/profil").hasAnyAuthority("ADMIN","RESP_ART","RESP_MAT","USER")
-//				.antMatchers("/produits/articles/**","/operationProducts/**").hasAnyAuthority("ADMIN","RESP_ART")
-//				.antMatchers("/produits/materiels/**","/operationProducts/**").hasAnyAuthority("ADMIN","RESP_MAT")
-//			.antMatchers("/admin/**").hasAuthority("ADMIN")
-//			.anyRequest().authenticated();
+			.authorizeRequests().antMatchers("/auth/**").permitAll()
+			.antMatchers("/categories/**","/magazins/**","/dashboard/**").hasAnyAuthority("ADMIN","RESP_ART","RESP_MAT")
+				.antMatchers("/profil").hasAnyAuthority("ADMIN","RESP_ART","RESP_MAT","USER")
+				.antMatchers("/produits/articles/**","/operationProducts/**").hasAnyAuthority("ADMIN","RESP_ART")
+				.antMatchers("/produits/materiels/**","/operationProducts/**").hasAnyAuthority("ADMIN","RESP_MAT")
+			.antMatchers("/admin/**").hasAuthority("ADMIN")
+			.anyRequest().authenticated();
 
 		http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
 	}
