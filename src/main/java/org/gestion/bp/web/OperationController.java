@@ -17,10 +17,14 @@ public class OperationController {
 
 
 
-	@GetMapping("")
-	public List<Operation> getAllOperations() {
-		 return operationService.findAllOperations();
+	@GetMapping("/articles")
+	public List<Operation> getOperationsArticle() {
+		 return operationService.getOperationArticles();
 	 }
+	@GetMapping("/materiels")
+	public List<Operation> getOperationsMaretiel() {
+		return operationService.getOperationMateriels();
+	}
 
 	@GetMapping("/{opId}")
 	public Operation getOneOperation(@PathVariable Long opId) throws RessourceNotFoundException {

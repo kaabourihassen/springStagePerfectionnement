@@ -20,6 +20,7 @@ public class MaterielService {
 	CategoryService categoryService;
 
 	public Materiel createMateriel(Materiel materiel) throws RessourceNotFoundException {
+		materiel.setPris(false);
 		materiel.setMagazin(magazinService.getOneMagazin(materiel.getMagazin().getMagazinId()));
 		materiel.setCategory(categoryService.getCategorie(materiel.getCategory().getCategoryId()));
 		return materielRepository.save(materiel);
@@ -32,6 +33,9 @@ public class MaterielService {
 		materiel.setMagazin(a.getMagazin());
 		materiel.setMatricule(a.getMatricule());
 		return materielRepository.save(materiel);
+	}
+	public List<Materiel> getMaterielByPris(boolean pris){
+		return materielRepository.findMaterielByPris(pris);
 	}
 
 	public Boolean retrait(Long materielId) throws RessourceNotFoundException {

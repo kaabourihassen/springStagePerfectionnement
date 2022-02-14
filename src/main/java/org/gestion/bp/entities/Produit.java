@@ -31,7 +31,6 @@ public class Produit implements Serializable{
 	private String intitule;
 	@NotEmpty
 	private String matricule;
-	private String photo;
 
 	@ManyToOne
 	@JoinColumn(name="magazinId")

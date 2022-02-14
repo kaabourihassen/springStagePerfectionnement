@@ -46,8 +46,7 @@ public class User implements UserDetails {
 	@Column(name = "fullName",length = 25)
 	@NotEmpty
 	private String fullName;
-	private String photo;
-	
+
 	@NotNull
 	private boolean enabled=true;
 

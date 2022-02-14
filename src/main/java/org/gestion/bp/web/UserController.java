@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 import org.gestion.bp.configuration.JwtResponse;
 import org.gestion.bp.configuration.jwt.AuthTokenFilter;
 import org.gestion.bp.configuration.jwt.JwtUtils;
+import org.gestion.bp.entities.Materiel;
 import org.gestion.bp.entities.Role;
 import org.gestion.bp.exception.RessourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +20,6 @@ import org.gestion.bp.entities.User;
 import org.gestion.bp.service.UserService;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -77,22 +77,13 @@ public class UserController {
 
 	@PostMapping(value="/dashboard/InsertOuvrier")
 	public User insertProdMateriel(@RequestBody User user) {
-		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-		try {
-			String encodedPassword = passwordEncoder.encode(user.getPassword());
-			user.setPassword(encodedPassword);
-			user.setRole(Role.USER);
-			return userService.insertUser(user);
-		}
-		catch(Exception e) {
-			e.printStackTrace();
-		}
-		return user;
+		return userService.register(user);
 	}
 	@PutMapping(value="/dashboard/updateUser/{userId}")
 	public User updateUser(@PathVariable Long userId,@RequestBody User user) {
 		return userService.updateUser(userId,user);
 	}
+
 
 	@GetMapping("/admin/ListAdmin")
 	public List<User> getAllAdmins() {
@@ -114,6 +105,7 @@ public class UserController {
 	    try {
 			User user1 = userService.getOneUser(userId);
 			user1.setRole(Role.ADMIN);
+			return userService.updateUser(userId,user1);
 	    }
 	    catch(Exception e) {
 	        e.printStackTrace();
@@ -125,6 +117,7 @@ public class UserController {
 		try {
 			User user1 = userService.getOneUser(userId);
 			user1.setRole(Role.RESP_ART);
+			return userService.updateUser(userId,user1);
 		}
 		catch(Exception e) {
 			e.printStackTrace();
@@ -136,6 +129,7 @@ public class UserController {
 		try {
 			User user1 = userService.getOneUser(userId);
 			user1.setRole(Role.RESP_MAT);
+			return userService.updateUser(userId,user1);
 		}
 		catch(Exception e) {
 			e.printStackTrace();
@@ -148,6 +142,7 @@ public class UserController {
 		try {
 			User user1 = userService.getOneUser(userId);
 			user1.setRole(Role.USER);
+			return userService.updateUser(userId,user1);
 		}
 		catch(Exception e) {
 			e.printStackTrace();

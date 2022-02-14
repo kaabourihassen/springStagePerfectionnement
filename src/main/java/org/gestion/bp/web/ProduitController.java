@@ -52,6 +52,10 @@ public class ProduitController {
 	public ArticleConsomme getOneArticle(@PathVariable Long articleId) throws RessourceNotFoundException {
 		return articleCService.getOneArticle(articleId);
 	}
+	@GetMapping("/materiels/materielPris/{pris}")
+	public List<Materiel> getByPris(@PathVariable boolean pris){
+		return materielService.getMaterielByPris(pris);
+	}
 	@GetMapping("/materiels/{materielId}")
 	public Materiel getOneMateriel(@PathVariable Long materielId) throws RessourceNotFoundException {
 		return materielService.getOneMateriel(materielId);
