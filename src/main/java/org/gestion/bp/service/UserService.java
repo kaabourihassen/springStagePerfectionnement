@@ -75,7 +75,7 @@ public class UserService implements UserDetailsService {
 		user1.setAge(user.getAge());
 		user1.setEmail(user.getEmail());
 		user1.setFullName(user.getFullName());
-		user1.setEnabled(true);
+		user1.setEnabled(false);
 		user1.setRole(Role.USER);
 		String encodedPass = passwordEncoder.encode(user.getPassword());
 		user1.setPassword(encodedPass);

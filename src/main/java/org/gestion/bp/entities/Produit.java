@@ -30,6 +30,7 @@ public class Produit implements Serializable{
 	@NotEmpty
 	private String intitule;
 	@NotEmpty
+    @Column(unique = true)
 	private String matricule;
 
 	@ManyToOne

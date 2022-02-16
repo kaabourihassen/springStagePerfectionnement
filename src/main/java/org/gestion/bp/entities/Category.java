@@ -20,6 +20,7 @@ public class Category implements Serializable {
 	@NotEmpty
 	private Long CategoryId;
 	@NotEmpty
+	@Column(unique = true)
 	private String nomCateg;
 
 	@NotEmpty

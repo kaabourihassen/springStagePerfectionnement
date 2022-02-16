@@ -23,7 +23,7 @@ public class Magazin implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@NotEmpty
 	private Long magazinId;
-	@Column(name = "nomMagazin",length = 15)
+	@Column(name = "nomMagazin",length = 15,unique = true)
 	private String nomMagazin;
 
 

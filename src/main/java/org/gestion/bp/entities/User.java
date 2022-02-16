@@ -26,7 +26,7 @@ public class User implements UserDetails {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long userId;
 	
-	@Column(name="cin",length=8)
+	@Column(name="cin",length=8,unique = true)
 	@NotEmpty
 	@Size(min=8,max=8)
 	private int cin ;
@@ -52,6 +52,7 @@ public class User implements UserDetails {
 
 	@JsonIgnore
 	private Role role;
+//	private boolean locked = true;
 
 	@JsonIgnore
 	@OneToMany(mappedBy="user",cascade = CascadeType.MERGE , fetch =FetchType.EAGER)
@@ -75,7 +76,7 @@ public class User implements UserDetails {
 
 	@Override
 	public boolean isEnabled() {
-		return true;
+		return enabled;
 	}
 
 
