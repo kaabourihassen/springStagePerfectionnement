@@ -2,12 +2,21 @@ package org.gestion.bp.service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
+import org.gestion.bp.configuration.JwtResponse;
+import org.gestion.bp.configuration.jwt.AuthTokenFilter;
+import org.gestion.bp.configuration.jwt.JwtUtils;
 import org.gestion.bp.dao.UserRepository;
 import org.gestion.bp.entities.Role;
 import org.gestion.bp.entities.User;
 import org.gestion.bp.exception.RessourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -20,6 +29,11 @@ public class UserService implements UserDetailsService {
 
 	@Autowired
 	private PasswordEncoder passwordEncoder;
+	@Autowired
+	private AuthenticationManager authenticationManager;
+	@Autowired
+	private JwtUtils jwtUtils;
+
 
 		
 		public User insertUser(User user) {	
@@ -83,6 +97,20 @@ public class UserService implements UserDetailsService {
     }
 
 
+	public ResponseEntity<?> login(User loginRequest) {
+		Authentication authentication = authenticationManager.authenticate(
+				new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
 
+		SecurityContextHolder.getContext().setAuthentication(authentication);
+		String jwt = jwtUtils.generateJwtToken(authentication);
+
+		User userDetails = (User) authentication.getPrincipal();
+		List<String> roles = userDetails.getAuthorities().stream()
+				.map(item -> item.getAuthority())
+				.collect(Collectors.toList());
+
+		return ResponseEntity.ok(new JwtResponse(jwt,
+				userDetails.getFullName(),userDetails.getUserId(),userDetails.getRole(),userDetails.getEmail(),true));
+	}
 }
 

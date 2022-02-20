@@ -28,31 +28,15 @@ public class UserController {
     @Autowired
     UserService userService;
 	@Autowired
-	private AuthenticationManager authenticationManager;
-	@Autowired
 	private JwtUtils jwtUtils;
 
 	AuthTokenFilter authTokenFilter;
 
-	@Autowired
-	PasswordEncoder passwordEncoder;
 
 	@PostMapping("/auth/signin")
 	public ResponseEntity<?> authenticateUser(@RequestBody User loginRequest) {
 
-		Authentication authentication = authenticationManager.authenticate(
-				new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
-
-		SecurityContextHolder.getContext().setAuthentication(authentication);
-		String jwt = jwtUtils.generateJwtToken(authentication);
-
-		User userDetails = (User) authentication.getPrincipal();
-		List<String> roles = userDetails.getAuthorities().stream()
-				.map(item -> item.getAuthority())
-				.collect(Collectors.toList());
-
-		return ResponseEntity.ok(new JwtResponse(jwt,
-				userDetails.getFullName(),userDetails.getUserId(),userDetails.getRole(),userDetails.getEmail(),true));
+		return userService.login(loginRequest);
 	}
 	@PostMapping("/auth/register")
 	public User register(@RequestBody User user){
@@ -104,6 +88,7 @@ public class UserController {
 	public User evolveToAdmin(@PathVariable Long userId) {
 	    try {
 			User user1 = userService.getOneUser(userId);
+			user1.setEnabled(true);
 			user1.setRole(Role.ADMIN);
 			return userService.updateUser(userId,user1);
 	    }
@@ -116,6 +101,7 @@ public class UserController {
 	public User evolveToRESPART(@PathVariable Long userId) {
 		try {
 			User user1 = userService.getOneUser(userId);
+			user1.setEnabled(true);
 			user1.setRole(Role.RESP_ART);
 			return userService.updateUser(userId,user1);
 		}
@@ -128,6 +114,7 @@ public class UserController {
 	public User evolveToRESPMAT(@PathVariable Long userId) {
 		try {
 			User user1 = userService.getOneUser(userId);
+			user1.setEnabled(true);
 			user1.setRole(Role.RESP_MAT);
 			return userService.updateUser(userId,user1);
 		}
@@ -141,6 +128,7 @@ public class UserController {
 	public User demoteToUser(@PathVariable Long userId) {
 		try {
 			User user1 = userService.getOneUser(userId);
+			user1.setEnabled(false);
 			user1.setRole(Role.USER);
 			return userService.updateUser(userId,user1);
 		}
