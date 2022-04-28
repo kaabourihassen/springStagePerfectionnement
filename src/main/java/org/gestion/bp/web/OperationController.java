@@ -10,13 +10,16 @@ import org.springframework.web.bind.annotation.*;
 import org.gestion.bp.entities.Operation;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:4200")
 @RequestMapping("/operations")
 public class OperationController {
 	@Autowired
 	OperationService operationService;
 
-
-
+	@GetMapping("")
+	public List<Operation> getOperations() {
+		return operationService.getOperations();
+	}
 	@GetMapping("/articles")
 	public List<Operation> getOperationsArticle() {
 		 return operationService.getOperationArticles();

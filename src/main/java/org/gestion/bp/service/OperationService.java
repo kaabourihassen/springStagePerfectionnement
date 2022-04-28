@@ -101,4 +101,7 @@ public class OperationService {
 		operationRepository.deleteById(id);
 	}
 
+    public List<Operation> getOperations() {
+		return operationRepository.findAll();
+    }
 }

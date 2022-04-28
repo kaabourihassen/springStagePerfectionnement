@@ -11,6 +11,7 @@ import org.springframework.ui.Model;
 import java.util.List;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:4200")
 @RequestMapping("/categories")
 public class CategorieController {
 
